@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -20,7 +20,14 @@ interface Note {
 }
 
 const Index = () => {
-  const [notes, setNotes] = useState<Note[]>([]);
+  const [notes, setNotes] = useState<Note[]>(() => {
+    const localNotes = localStorage.getItem("notes");
+    return localNotes ? JSON.parse(localNotes) : [];
+  });
+  
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const { toggleColorMode } = useColorMode();
@@ -33,15 +40,23 @@ const Index = () => {
         title,
         content,
       };
-      setNotes([...notes, newNote]);
-      setTitle("");
-      setContent("");
-    }
-  };
+      setNotes((prevNotes) => {
+      const updatedNotes = [...prevNotes, newNote];
+      localStorage.setItem("notes", JSON.stringify(updatedNotes));
+      return updatedNotes;
+    });
+    setTitle("");
+    setContent("");
+  }
+};
 
   const deleteNote = (id: number) => {
-    setNotes(notes.filter((note) => note.id !== id));
-  };
+    setNotes((prevNotes) => {
+    const updatedNotes = prevNotes.filter((note) => note.id !== id);
+    localStorage.setItem("notes", JSON.stringify(updatedNotes));
+    return updatedNotes;
+  });
+};
 
   return (
     <Box p={4}>
