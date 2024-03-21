@@ -61,6 +61,12 @@ const Index = () => {
           placeholder="Content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
+          onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+            if (e.key === 'Enter' && e.shiftKey) {
+              e.preventDefault();
+              addNote();
+            }
+          }}
         />
         <Button leftIcon={<FaPlus />} onClick={addNote}>
           Add Note
