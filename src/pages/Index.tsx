@@ -102,7 +102,7 @@ const Index = () => {
                 Delete
               </Button>
             </Flex>
-            <Text mt={2}>{note.content}</Text>
+            <Text mt={2} whiteSpace="pre-wrap">{note.content}</Text>
           </Box>
         ))}
       </Stack>
